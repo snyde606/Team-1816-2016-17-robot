@@ -24,7 +24,7 @@ public class Components {
 
 	//Drivetrain constants
 	private static final int FRONT_LEFT_TALON = 2;
-	private static final int FRONT_RIGHT_TALON = 8; //Trent likes big Ds apparently
+	private static final int FRONT_RIGHT_TALON = 8; //Trent likes big Ds apparently   
 	private static final int BACK_LEFT_TALON = 1;
 	private static final int BACK_RIGHT_TALON = 9;
 	private static final int CENTER_TALON = 3;

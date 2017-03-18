@@ -22,6 +22,7 @@ public class RotateToAngleCWFromStartCommand extends Command{
 	}
 	
 	protected void initialize(){
+		System.out.println("ROTATING " + angle + "DEGREES CW");
 		this.target = (drivetrain.getAutoGyroZero() + angle);
 		
 		if(target - drivetrain.getGyroAngle() < 0)
@@ -38,7 +39,7 @@ public class RotateToAngleCWFromStartCommand extends Command{
 	}
 	
 	protected void execute(){
-		double rotation = 0.3;
+		double rotation = 0.5;
 		
 		if(Math.abs(target-drivetrain.getGyroAngle())<20 || Math.abs(drivetrain.getGyroAngle()-startAngle)<5)
 			rotation*=0.6;

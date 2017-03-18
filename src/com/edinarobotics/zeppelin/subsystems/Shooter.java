@@ -6,12 +6,13 @@ import com.ctre.CANTalon.TalonControlMode;
 import com.edinarobotics.utils.subsystems.Subsystem1816;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter extends Subsystem1816{
 
 	private CANTalon rightShooterTalon, leftShooterTalon;
-	private double shooterSpeed = 0.0;
+	private double leftShooterSpeed = 0.0;
+	private double rightShooterSpeed = 0.0;	
+	private double incrementedShooterSpeed = 3300;
 	
 	private final double P = 0.013;
 	private final double I = 0.00012;
@@ -22,32 +23,37 @@ public class Shooter extends Subsystem1816{
 		this.rightShooterTalon = new CANTalon(rightShooterTalon);
 		this.rightShooterTalon.changeControlMode(TalonControlMode.Speed);
 		this.rightShooterTalon.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+		this.rightShooterTalon.setPID(P, I, D);
+		this.rightShooterTalon.setF(F);
 		this.leftShooterTalon = new CANTalon(leftShooterTalon);
-		this.leftShooterTalon.changeControlMode(TalonControlMode.Follower);
-//		this.leftShooterTalon.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-//		this.leftShooterTalon.setPID(P, I, D);
-//		this.leftShooterTalon.setF(F);
-		this.leftShooterTalon.set(rightShooterTalon);
-		this.shooterSpeed = 0;
+		this.leftShooterTalon.changeControlMode(TalonControlMode.Speed);
+		this.leftShooterTalon.setFeedbackDevice(FeedbackDevice.PulseWidth);
+		this.leftShooterTalon.setPID(P, I, D);
+		this.leftShooterTalon.setF(F);
+		this.leftShooterSpeed = 0.0;
+		this.rightShooterSpeed = 0.0;
+		this.leftShooterTalon.reverseSensor(true);
+	}
+	
+	public void addIncrementSpeed(double inc){
+		incrementedShooterSpeed += inc;
 	}
 	
 	@Override
 	public void update() {
-		this.rightShooterTalon.setPID(SmartDashboard.getNumber("Shooter-P", P), SmartDashboard.getNumber("Shooter-I", I), SmartDashboard.getNumber("Shooter-D", D));
-		this.rightShooterTalon.setF(SmartDashboard.getNumber("Shooter-F", F));
-		rightShooterTalon.set(shooterSpeed);
-//		leftShooterTalon.set(shooterSpeed);
-//		int percentPower = (int)(leftShooterTalon.getOutputVoltage()/0.12);
-//		System.out.println("Error: " + leftShooterTalon.getError() + "\t\tRPM: " + leftShooterTalon.getSpeed() + "\t\t%Power: " + percentPower + "\t\tTicks: " + leftShooterTalon.getEncPosition());
+		rightShooterTalon.set(rightShooterSpeed);
+		leftShooterTalon.set(leftShooterSpeed);
+//		System.out.println(leftShooterSpeed);
 	}
 	
-	public void setShooterTalon(double sSpeed){
-		shooterSpeed = sSpeed;
+	public void setShooterTalons(double lSpeed, double rSpeed){
+		leftShooterSpeed = lSpeed;
+		rightShooterSpeed = rSpeed;
 		update();
 	}
 	
-	public double getShooterTalon() {
-		return shooterSpeed;
+	public double getIncrementedShooterSpeed(){
+		return incrementedShooterSpeed;
 	}
 	
 	public CANTalon getRightShooterTalon(){

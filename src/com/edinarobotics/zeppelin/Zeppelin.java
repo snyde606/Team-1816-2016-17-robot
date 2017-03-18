@@ -51,10 +51,9 @@ public class Zeppelin extends IterativeRobot {
 		chooser.addObject("Right Gear Auto", new AutonomousCommand(AutonomousMode.RIGHT_GEAR_AUTO));
 		chooser.addObject("Hopper Boiler Shoot Left", new AutonomousCommand(AutonomousMode.HOPPER_BOILER_SHOOT_LEFT));
 		chooser.addObject("Hopper Boiler Shoot Right", new AutonomousCommand(AutonomousMode.HOPPER_BOILER_SHOOT_RIGHT));
+		chooser.addObject("Just Shoot", new AutonomousCommand(AutonomousMode.JUST_SHOOT));
 		chooser.addObject("Nothing", new AutonomousCommand(AutonomousMode.NOTHING));
 		SmartDashboard.putData("Autonomous", chooser);
-		
-		setupDashboard();
 	}
 
 	/**
@@ -111,7 +110,7 @@ public class Zeppelin extends IterativeRobot {
 		drivetrain.setDefaultCommand(new GamepadDriveCommand(gamepad0));
 		augers.setDefaultCommand(new GamepadAugersCommand(gamepad1));
 		climber.setDefaultCommand(new GamepadClimberCommand(gamepad1));
-		drivetrain.setGyroZero();		
+		drivetrain.setGyroZero();
 	}
 
 	/**
@@ -128,16 +127,5 @@ public class Zeppelin extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
-	}
-	
-	public void setupDashboard() {
-		
-		//Shooter
-		SmartDashboard.putNumber("Shooter-Speed", 3600);
-		SmartDashboard.putNumber("Shooter-P", 0.013);
-		SmartDashboard.putNumber("Shooter-I", 0.00012);
-		SmartDashboard.putNumber("Shooter-D", 2.0);
-		SmartDashboard.putNumber("Shooter-F", 0.0);
-		
 	}
 }

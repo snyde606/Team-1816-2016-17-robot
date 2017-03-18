@@ -16,6 +16,7 @@ public class SetGyroZeroCommand extends Command{
 	}
 	
 	protected void initialize(){
+		System.out.println("SETTING AUTO GYRO ZERO");
 		drivetrain.setAutoGyroZero(drivetrain.getGyroAngle());
 	}
 	

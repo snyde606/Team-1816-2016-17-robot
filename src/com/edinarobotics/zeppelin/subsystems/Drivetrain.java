@@ -14,16 +14,16 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Drivetrain extends Subsystem1816{
 
 	private boolean slowMode = false;
-	private boolean fieldCentric = true;
+	private boolean fieldCentric = false;
 	private boolean centerWheelDown = true;
 	
 	private SerialPort serialPort;
 	private SerialPort sendingSerial;//maximum strafe engaged!!!
 	private String newString = "";
 	private String oldString = "";
-	private int visionX = 320;
-	private int visionY = 0;
-	private int visionArea = 0;
+	private double visionX = 0;
+	private double visionY = 0;
+	private double visionArea = 0;
 	
 	private AHRS navX;
 	private double gyroZero;
@@ -47,8 +47,10 @@ public class Drivetrain extends Subsystem1816{
 		
 		navX = new AHRS(Port.kMXP);
 		
-//		this.serialPort = new SerialPort(9600, SerialPort.Port.kMXP, 8,					//examine settings in RoboRealm:Serial to get the proper inputs. inputs in order are: baud rate, port type, data bits, parity, stop bits
-//				SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
+		try{
+			this.serialPort = new SerialPort(9600, SerialPort.Port.kMXP, 8,					//examine settings in RoboRealm:Serial to get the proper inputs. inputs in order are: baud rate, port type, data bits, parity, stop bits
+					SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
+		}catch(Exception e){System.out.println("serial port creation crashed");};
 		
 //		this.sendingSerial = new SerialPort(9600, SerialPort.Port.kUSB1, 8,					//examine settings in RoboRealm:Serial to get the proper inputs. inputs in order are: baud rate, port type, data bits, parity, stop bits
 //				SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
@@ -90,9 +92,8 @@ public class Drivetrain extends Subsystem1816{
 		this.center.setVoltageRampRate(RAMP_RATE);
 		
 		this.versaDropSolenoid = new Solenoid(pcmNode, dropSolenoidID);
-				
+		
 		centerWheelDown = true;
-		fieldCentric = true;
 		
 	}
 	
@@ -103,8 +104,8 @@ public class Drivetrain extends Subsystem1816{
 		double rightVelocity = rightSpeed;
 		double centerVelocity = xStrafe;
 		
-		rightVelocity -= rotation;
-		leftVelocity += rotation;
+		rightVelocity -= rotation*0.75;
+		leftVelocity += rotation*0.75;
 		
 		backLeft.set(signum(leftVelocity,1,-1));
 		backRight.set(signum(rightVelocity,1,-1));
@@ -117,31 +118,30 @@ public class Drivetrain extends Subsystem1816{
 	
 	public void setValues(double xStrafe, double yStrafe, double rotation){
 		if(slowMode){
-			xStrafe *= SLOW_MODE;
 			yStrafe *= SLOW_MODE;
 			rotation *= SLOW_MODE;
 		}
 	
-		if(fieldCentric){
-			double offset = gyroZero - navX.getAngle();
-			offset*=6.28/360;
-			
-			double xTemp = Math.sin(offset)*Math.abs(Math.sin(offset))*yStrafe;
-			double yTemp = -Math.sin(offset)*Math.abs(Math.sin(offset))*xStrafe;
-			xTemp += Math.cos(offset)*Math.abs(Math.cos(offset))*xStrafe;
-			yTemp += Math.cos(offset)*Math.abs(Math.cos(offset))*yStrafe;
-			
-			this.xStrafe = xTemp;
-			this.rightSpeed = yTemp;
-			this.leftSpeed = yTemp;
-			this.rotation = rotation;
-		}
-		else{
+//		if(fieldCentric){
+//			double offset = gyroZero - navX.getAngle();
+//			offset*=6.28/360;
+//			
+//			double xTemp = Math.sin(offset)*Math.abs(Math.sin(offset))*yStrafe;
+//			double yTemp = -Math.sin(offset)*Math.abs(Math.sin(offset))*xStrafe;
+//			xTemp += Math.cos(offset)*Math.abs(Math.cos(offset))*xStrafe;
+//			yTemp += Math.cos(offset)*Math.abs(Math.cos(offset))*yStrafe;
+//			
+//			this.xStrafe = xTemp;
+//			this.rightSpeed = yTemp;
+//			this.leftSpeed = yTemp;
+//			this.rotation = rotation;
+//		}
+//		else{
 			this.xStrafe = xStrafe;
 			this.rightSpeed = yStrafe;
 			this.leftSpeed = yStrafe;
 			this.rotation = rotation;
-		}
+//		}
 		
 		update();
 	}
@@ -161,7 +161,6 @@ public class Drivetrain extends Subsystem1816{
 		if(slowMode){
 			leftSpeed *= SLOW_MODE;
 			rightSpeed *= SLOW_MODE;
-			centerSpeed *= SLOW_MODE;
 		}
 
 		this.leftSpeed = leftSpeed;
@@ -179,19 +178,47 @@ public class Drivetrain extends Subsystem1816{
 		centerWheelDown = false;
 		update();
 	}
+	
+	public void readSerialXYNew() {
+		try{
+			newString = serialPort.readString();
+			
+			if(!newString.equals("")) {
+				if(newString.substring(0,1).equals("{") && 
+						newString.substring(newString.length()-1).equals("}")) {
+					String str = newString.substring(1,newString.length()-1);
+					String[] params = str.split(" ");
+					
+					if(params.length == 3) {
+						visionX = Double.parseDouble(params[0]);
+						visionY = Double.parseDouble(params[1]);
+						visionArea = Double.parseDouble(params[2]);
+						
+						System.out.println("X: " + visionX);
+						System.out.println("Y: " + visionY);
+						System.out.println("Area: " + visionArea);
+					}
+				}
+			}
+		} catch (Exception e) {
+			
+		}
+	}
 
 	public void readSerialXY(){
 		int space1 = 0;
 		int space2 = 0;
 		int endBracket = 0;
-		try{
-			newString = serialPort.readString();																//read the string from the serial port; store it into temp variable
-		} catch(Exception e){
-			System.out.println("serialPort read messed up");
-			visionX = 0;
-			visionY = 0;
-			visionArea = 0;
-		}
+		boolean successread = false;
+		while(!successread)
+			try{
+				newString = serialPort.readString();	
+				if(!newString.equals(""))
+					successread = true;
+				//read the string from the serial port; store it into temp variable
+			} catch(Exception e){
+				System.out.println("serialPort read messed up");
+			}
 		
 		System.out.println("Read String: " + newString);
 		
@@ -208,12 +235,13 @@ public class Drivetrain extends Subsystem1816{
 					space2 = newString.substring(space1 + 1).indexOf(' ') + space1 + 1;							//find index of second space (in between ycoord and fps)
 					endBracket = newString.indexOf('}');
 					if(space1!=1){
-						visionX = Integer.parseInt(newString.substring(1, space1), 10);							//select xcoord, convert it from String to int, store it in visionX	
-						visionY = Integer.parseInt(newString.substring(space1 + 1, space2), 10);				//select ycoord, convert it from String to int, store it in visionY
-						visionArea = Integer.parseInt(newString.substring(space2+1, endBracket), 10);			//select vision target's Area, convert it from String to int, store it in visionArea
+						visionX = Double.parseDouble(newString.substring(1, space1));							//select xcoord, convert it from String to int, store it in visionX	
+						visionY = Double.parseDouble(newString.substring(space1 + 1, space2));				//select ycoord, convert it from String to int, store it in visionY
+						visionArea = Double.parseDouble(newString.substring(space2+1, endBracket));			//select vision target's Area, convert it from String to int, store it in visionArea
 					}
 					System.out.println("X: " + visionX);													//print x coordinate
-					System.out.println("Y: " + visionY);													//print y coordinate
+					System.out.println("Y: " + visionY);													//print x coordinate
+					System.out.println("A: " + visionArea);													//print y coordinate
 					//END xcoord and ycoord extraction
 				}
 				else if(newString.substring(0, 1).equals("{")){												//does string begin with "{"? i.e. it's the first half of a packet?
@@ -227,9 +255,9 @@ public class Drivetrain extends Subsystem1816{
 						space2 = oldString.substring(space1 + 1).indexOf(' ') + space1 + 1;
 						endBracket = newString.indexOf('}');
 						if(space1!=1){
-							visionX = Integer.parseInt(oldString.substring(1, space1), 10);
-							visionY = Integer.parseInt(oldString.substring(space1 + 1, space2), 10);
-							visionArea = Integer.parseInt(newString.substring(space2+1, endBracket), 10);
+							visionX = Double.parseDouble(oldString.substring(1, space1));
+							visionY = Double.parseDouble(oldString.substring(space1 + 1, space2));
+							visionArea = Double.parseDouble(newString.substring(space2+1, endBracket));
 						}
 						System.out.println("PiecedString: " + oldString);
 						System.out.println("X: " + visionX);
@@ -253,6 +281,10 @@ public class Drivetrain extends Subsystem1816{
 	
 	public void clearSerial(){
 		serialPort.reset();
+	}
+	
+	public void readSerial(){
+		serialPort.readString();
 	}
 	
 	@Override
@@ -313,13 +345,13 @@ public class Drivetrain extends Subsystem1816{
 	public SerialPort getSerialPort(){
 		return serialPort;
 	}
-	public int getVisionX(){
+	public double getVisionX(){
 		return visionX;
 	}
-	public int getVisionY(){
+	public double getVisionY(){
 		return visionY;
 	}
-	public int getVisionArea(){
+	public double getVisionArea(){
 		return visionArea;
 	}
 	

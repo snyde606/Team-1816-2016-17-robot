@@ -5,28 +5,27 @@ import com.edinarobotics.zeppelin.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class SetShooterSpeedCommand extends Command{
+public class IncrementShooterSpeedCommand extends Command{
 
 	private Shooter shooter;
-	private double lspeed, rspeed;
+	private double inc;
 	
-	public SetShooterSpeedCommand(double lspeed, double rspeed){
-		super("setshooterspeedcommand");
+	public IncrementShooterSpeedCommand(double inc){
+		super("incrementshooterspeedcommand");
 		this.shooter = Components.getInstance().shooter;
-		this.lspeed = lspeed;
-		this.rspeed = rspeed;
+		this.inc = inc;
 		requires(shooter);
 	}
 	
 	protected void initialize(){
-		shooter.setShooterTalons(lspeed,rspeed);
+		shooter.addIncrementSpeed(inc);
+		shooter.setShooterTalons(shooter.getIncrementedShooterSpeed()*1.03,shooter.getIncrementedShooterSpeed());
 	}
 	
 	@Override
-	
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
 		return true;
-	}
-
+	}	
+	
 }
