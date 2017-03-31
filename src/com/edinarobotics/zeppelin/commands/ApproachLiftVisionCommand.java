@@ -19,9 +19,9 @@ public class ApproachLiftVisionCommand extends Command{
 	private final int SLOW_RANGE_AREA = 6000;
 	private final int ENDING_TOLERANCE_AREA = 2000;
 	
-	double x = 0;
-	double y = 0;
-	double area = 0;
+	int x = 0;
+	int y = 0;
+	int area = 0;
 	
 	public ApproachLiftVisionCommand(double velocityForward, double velocityStrafe){
 		super("approachliftvisioncommand");

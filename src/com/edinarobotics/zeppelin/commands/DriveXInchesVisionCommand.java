@@ -20,14 +20,15 @@ public class DriveXInchesVisionCommand extends Command {
 	private double initialPosition, target, ticks;
 	private final double rampDownStart = 24;											//inches from the target at which the drivetrain slows down speed
 	private double rampDownValue = 0;
-	private double directionalMultiplier = 1;
+	
+	private boolean tooClose = false;
+	private int wiggleCounter = 0;
 	
 	private final int CAMERA_X_DIMENSION = 640;
 	private final int SLOW_RANGE_STRAFE = 30;
 	private final int ENDING_TOLERANCE_STRAFE = 3;
-	double x = 0;
-	double y = 0;
-	double a = 0;
+	int x = 0;
+	int a = 0;
 	
 	public DriveXInchesVisionCommand(double inches) {
 		super("drivexinchescommand");
@@ -53,41 +54,44 @@ public class DriveXInchesVisionCommand extends Command {
 		
 		drivetrain.raiseCenterWheel();
 		
+		tooClose = false;
+		wiggleCounter = 0;
+		
 	}
 	
 	@Override 
 	protected void execute() {
 		
-		drivetrain.readSerialXYNew();
+		drivetrain.readSerialXY();
 		x = drivetrain.getVisionX();
+		a = drivetrain.getVisionArea();
 		
-		if(a>30000){
+		if(a>30000)
 			x=320;
-		}
 		
-		if(x>CAMERA_X_DIMENSION)
-			directionalMultiplier = -1;
-		else 
-			directionalMultiplier = 1;
-
-		double deltaVision = CAMERA_X_DIMENSION / (2-x); 	//how many pixels the target is off center		//320 is the center of the camera screen (camera used for vision tracking) in X-coordinates	
+//UNTESTED	
+//		if(a>30000)
+//			tooClose = true;
+//		if(tooClose)
+//			x = 320;
+//		
+//		if(Math.abs(target - drivetrain.getFrontLeftTalon().getEncPosition()) < 170){
+//			wiggleCounter+=2;
+//			if((wiggleCounter%10)%2 == 0)
+//				x = 480;
+//			else
+//				x = 160;
+//		}
+//UNTESTED
+		
+		double deltaVision = CAMERA_X_DIMENSION/2-x; 	//how many pixels the target is off center		//320 is the center of the camera screen (camera used for vision tracking) in X-coordinates	
 		
 		double velocityForward = 0.34;
-		double velocityStrafe = 0.3;
 		
 		//yStrafe control
 		if (Math.abs(target - drivetrain.getFrontLeftTalon().getEncPosition()) < rampDownValue || Math.abs(drivetrain.getFrontLeftTalon().getEncPosition() - initialPosition) < 5*31.6923) 	//are we close enough to the target to slow down speed?
 			velocityForward*=0.66;
 		//end yStrafe control
-		
-		//xStrafe control
-		if(Math.abs(deltaVision) < SLOW_RANGE_STRAFE){
-			if(Math.abs(deltaVision)>ENDING_TOLERANCE_STRAFE)
-				velocityStrafe *= 0.6;
-			else
-				velocityStrafe = 0;
-		}
-		//end xStrafe control
 		
 		System.out.println("Error: " + deltaVision);
 		double quickerror = drivetrain.getFrontLeftTalon().getEncPosition() - target;//print how many pixels off the target is from the center

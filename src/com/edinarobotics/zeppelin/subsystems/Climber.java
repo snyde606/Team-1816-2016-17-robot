@@ -5,7 +5,7 @@ import com.edinarobotics.utils.subsystems.Subsystem1816;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Climber extends Subsystem1816{
+public class Climber extends Subsystem1816{//#maximumkaraoke
 
 	private CANTalon climberTalon;
 	private double climberSpeed;
@@ -33,7 +33,7 @@ public class Climber extends Subsystem1816{
 		super.setDefaultCommand(command);
 	}
 
-	public CANTalon getClimberTalon(){
+	public CANTalon getClimberTalon(){//pok pok karaoke pok
 		return climberTalon;
 	}
 	

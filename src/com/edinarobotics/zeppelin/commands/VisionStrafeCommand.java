@@ -35,8 +35,8 @@ public class VisionStrafeCommand extends Command {
 	private boolean powerAdded = false;
 	private double encoderStart;
 	
-	private double x = 0;
-	private double y = 0;
+	private int x = 0;
+	private int y = 0;
 	
 	public VisionStrafeCommand(boolean driverInterruptable, Gamepad gamepad) {
 		super("visionstrafecommand");

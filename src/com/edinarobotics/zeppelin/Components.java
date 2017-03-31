@@ -33,6 +33,7 @@ public class Components {
 	//Collector constants
 	private static final int COLLECTOR_TALON = 5; //collector talon!!! whooooohooooooooooooo
 	private static final int GEAR_COLLECTOR_SOLENOID = 5;
+	private static final int GEAR_PUNCHER_SOLENOID = 99;
 	//End Collector constants
 	
 	//Shooter constants
@@ -60,7 +61,7 @@ public class Components {
 		drivetrain = new Drivetrain(FRONT_LEFT_TALON, FRONT_RIGHT_TALON, //Jacob your code is garbage
 				BACK_LEFT_TALON, BACK_RIGHT_TALON, CENTER_TALON, PCM_NODE_ID, VERSA_DROP_SOLENOID);
 		
-		collector = new Collector(COLLECTOR_TALON, GEAR_COLLECTOR_SOLENOID, PCM_NODE_ID);
+		collector = new Collector(COLLECTOR_TALON, GEAR_COLLECTOR_SOLENOID, GEAR_PUNCHER_SOLENOID, PCM_NODE_ID);
 		
 		shooter = new Shooter(RIGHT_SHOOTER_TALON, LEFT_SHOOTER_TALON);
 		

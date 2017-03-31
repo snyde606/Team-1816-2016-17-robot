@@ -31,7 +31,7 @@ public class AutonomousCommand extends CommandGroup {
 				addSequential(new SetGyroZeroCommand());
 				addSequential(new DriveXInchesCommand(62,0.6));
 				addSequential(new RotateToAngleCWFromStartCommand(-55));
-				addSequential(new DriveXInchesVisionCommand(76));
+				addSequential(new DriveXInchesVisionCommand(70));
 				
 				break;
 				

@@ -31,11 +31,6 @@ public class GamepadDriveCommand extends Command{
 		double yStrafe = gamepad.getLeftJoystick().getY();
 		double rotation = gamepad.getRightJoystick().getX();
 		
-		drivetrain.readSerialXYNew();
-		System.out.println("X: " + drivetrain.getVisionX());
-		System.out.println("Y: " + drivetrain.getVisionY());
-		System.out.println("Area: " + drivetrain.getVisionArea());
-		
 //		SmartDashboard.putNumber("BackLeft Encoder: ", drivetrain.getBackLeftTalon().getEncPosition());
 //		SmartDashboard.putNumber("BackRight Encoder: ", drivetrain.getBackRightTalon().getEncPosition());
 //		SmartDashboard.putNumber("FrontLeft Encoder: ", drivetrain.getFrontLeftTalon().getEncPosition());

@@ -21,9 +21,9 @@ public class Drivetrain extends Subsystem1816{
 	private SerialPort sendingSerial;//maximum strafe engaged!!!
 	private String newString = "";
 	private String oldString = "";
-	private double visionX = 0;
-	private double visionY = 0;
-	private double visionArea = 0;
+	private int visionX = 0;
+	private int visionY = 0;
+	private int visionArea = 0;
 	
 	private AHRS navX;
 	private double gyroZero;
@@ -178,34 +178,8 @@ public class Drivetrain extends Subsystem1816{
 		centerWheelDown = false;
 		update();
 	}
-	
-	public void readSerialXYNew() {
-		try{
-			newString = serialPort.readString();
-			
-			if(!newString.equals("")) {
-				if(newString.substring(0,1).equals("{") && 
-						newString.substring(newString.length()-1).equals("}")) {
-					String str = newString.substring(1,newString.length()-1);
-					String[] params = str.split(" ");
-					
-					if(params.length == 3) {
-						visionX = Double.parseDouble(params[0]);
-						visionY = Double.parseDouble(params[1]);
-						visionArea = Double.parseDouble(params[2]);
-						
-						System.out.println("X: " + visionX);
-						System.out.println("Y: " + visionY);
-						System.out.println("Area: " + visionArea);
-					}
-				}
-			}
-		} catch (Exception e) {
-			
-		}
-	}
 
-	public void readSerialXY(){
+	public void oldOutdatedReadSerialXY(){
 		int space1 = 0;
 		int space2 = 0;
 		int endBracket = 0;
@@ -220,8 +194,8 @@ public class Drivetrain extends Subsystem1816{
 				System.out.println("serialPort read messed up");
 			}
 		
-		System.out.println("Read String: " + newString);
-		
+		System.out.println("Raw Serial Port output: " + newString);
+
 		//START STRING PARSING
 		//string packet format is {xcoord ycoord fps}
 		//stores xcoord into x; stores ycoord into y
@@ -235,9 +209,9 @@ public class Drivetrain extends Subsystem1816{
 					space2 = newString.substring(space1 + 1).indexOf(' ') + space1 + 1;							//find index of second space (in between ycoord and fps)
 					endBracket = newString.indexOf('}');
 					if(space1!=1){
-						visionX = Double.parseDouble(newString.substring(1, space1));							//select xcoord, convert it from String to int, store it in visionX	
-						visionY = Double.parseDouble(newString.substring(space1 + 1, space2));				//select ycoord, convert it from String to int, store it in visionY
-						visionArea = Double.parseDouble(newString.substring(space2+1, endBracket));			//select vision target's Area, convert it from String to int, store it in visionArea
+						visionX = Integer.parseInt(newString.substring(1, space1), 10);							//select xcoord, convert it from String to int, store it in visionX	
+						visionY = Integer.parseInt(newString.substring(space1 + 1, space2), 10);				//select ycoord, convert it from String to int, store it in visionY
+						visionArea = Integer.parseInt(newString.substring(space2+1, endBracket), 10);			//select vision target's Area, convert it from String to int, store it in visionArea
 					}
 					System.out.println("X: " + visionX);													//print x coordinate
 					System.out.println("Y: " + visionY);													//print x coordinate
@@ -255,13 +229,80 @@ public class Drivetrain extends Subsystem1816{
 						space2 = oldString.substring(space1 + 1).indexOf(' ') + space1 + 1;
 						endBracket = newString.indexOf('}');
 						if(space1!=1){
-							visionX = Double.parseDouble(oldString.substring(1, space1));
-							visionY = Double.parseDouble(oldString.substring(space1 + 1, space2));
-							visionArea = Double.parseDouble(newString.substring(space2+1, endBracket));
+							visionX = Integer.parseInt(oldString.substring(1, space1), 10);
+							visionY = Integer.parseInt(oldString.substring(space1 + 1, space2), 10);
+							visionArea = Integer.parseInt(newString.substring(space2+1, endBracket), 10);
 						}
 						System.out.println("PiecedString: " + oldString);
 						System.out.println("X: " + visionX);
 						System.out.println("Y: " + visionY);
+					}
+					else
+						oldString = "";
+				}
+			}
+		} catch(Exception e){
+			System.out.println("Serial parsing messed up");
+			oldString = "";
+			newString = "";
+		}
+		//END STRING PARSING
+	}
+	
+	public void readSerialXY(){
+		int space1 = 0;
+		int space2 = 0;
+		int endBracket = 0;
+		boolean successread = false;
+		while(!successread)
+			try{
+				newString = serialPort.readString();	
+				if(!newString.equals(""))
+					successread = true;
+				//read the string from the serial port; store it into temp variable
+			} catch(Exception e){
+				System.out.println("serialPort read messed up");
+			}
+		
+		System.out.println("Raw Serial Port output: " + newString);
+
+		//START STRING PARSING
+		//string packet format is {xcoord,ycoord,area}
+		//stores xcoord into visionX; stores ycoord into visionY; stores area into visionArea
+		try{
+			if(newString.length()>0){																			//is string not blank?
+				if (newString.charAt(0) == '{' && newString.indexOf("}") > 0){		//does string begin with "{" and contain a "}"?
+					//START xcoord and ycoord extraction
+					String insidePacket = newString.substring(1, newString.indexOf("}"));
+					String[] dataValues = insidePacket.split(",");
+					if(dataValues.length > 0){
+						visionX = (int)Double.parseDouble(dataValues[0]);							//select xcoord, convert it from String to double then cast to int, store it in visionX	
+						visionY = (int)Double.parseDouble(dataValues[1]);				//select ycoord, convert it from String to double then cast to int, store it in visionY
+						visionArea = (int)Double.parseDouble(dataValues[2]);			//select vision target's Area, convert it from String to double then cast to int, store it in visionArea
+					}
+					System.out.println("X: " + visionX);													//print x coordinate
+					System.out.println("Y: " + visionY);													//print x coordinate
+					System.out.println("A: " + visionArea);													//print y coordinate
+					//END xcoord and ycoord extraction
+				}
+				else if(newString.substring(0, 1).equals("{")){												//does string begin with "{"? i.e. it's the first half of a packet?
+					oldString = newString;																	//store string into oldstring variable
+				}
+				else if(newString.substring(newString.length() - 1, newString.length()).equals("}")){		//does string end with "}"? i.e. it's the second half of a packet?
+					oldString += newString;																	//add string to oldstring (which should contain the first half of the packet already)
+					if (newString.charAt(0) == '{' && newString.indexOf("}") > 0){		//does string begin with "{" and contain a "}"?
+						//START xcoord and ycoord extraction
+						String insidePacket = newString.substring(1, newString.indexOf("}"));
+						String[] dataValues = insidePacket.split(",");
+						if(dataValues.length > 0){
+							visionX = (int)Double.parseDouble(dataValues[0]);							//select xcoord, convert it from String to double then cast to int, store it in visionX	
+							visionY = (int)Double.parseDouble(dataValues[1]);				//select ycoord, convert it from String to double then cast to int, store it in visionY
+							visionArea = (int)Double.parseDouble(dataValues[2]);			//select vision target's Area, convert it from String to double then cast to int, store it in visionArea
+						}
+						System.out.println("X: " + visionX);													//print x coordinate
+						System.out.println("Y: " + visionY);													//print x coordinate
+						System.out.println("A: " + visionArea);													//print y coordinate
+						//END xcoord and ycoord extraction
 					}
 					else
 						oldString = "";
@@ -345,13 +386,13 @@ public class Drivetrain extends Subsystem1816{
 	public SerialPort getSerialPort(){
 		return serialPort;
 	}
-	public double getVisionX(){
+	public int getVisionX(){
 		return visionX;
 	}
-	public double getVisionY(){
+	public int getVisionY(){
 		return visionY;
 	}
-	public double getVisionArea(){
+	public int getVisionArea(){
 		return visionArea;
 	}
 	

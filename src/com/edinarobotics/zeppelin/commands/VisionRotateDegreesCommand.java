@@ -17,7 +17,7 @@ public class VisionRotateDegreesCommand extends Command{
 	private final int CAMERA_X_DIMENSION = 640;
 	private final int ENDING_TOLERANCE = 3;
 	
-	private double x1,x2,x3,x4,x5;
+	private int x1,x2,x3,x4,x5;
 	private double avgX;
 	
 	public VisionRotateDegreesCommand() {

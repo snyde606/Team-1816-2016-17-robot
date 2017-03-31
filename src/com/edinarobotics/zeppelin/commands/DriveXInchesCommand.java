@@ -68,7 +68,7 @@ public class DriveXInchesCommand extends Command {
 			}
 		
 //		System.out.println("Error: " + deltaDegree);
-//		Github is best. Github is love. Github is dead. Long live Github.		
+		
 //		double right = (velocity*.95);
 //		double left = velocity;
 

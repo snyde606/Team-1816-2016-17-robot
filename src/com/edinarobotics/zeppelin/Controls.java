@@ -11,13 +11,13 @@ import com.edinarobotics.utils.gamepad.gamepadfilters.GamepadFilterSet;
 import com.edinarobotics.utils.gamepad.gamepadfilters.PowerFilter;
 import com.edinarobotics.zeppelin.commands.AnchorRobotCommand;
 import com.edinarobotics.zeppelin.commands.CloseGearCollectorCommand;
-import com.edinarobotics.zeppelin.commands.DriveXInchesVisionCommand;
 import com.edinarobotics.zeppelin.commands.EndAugerButtonCommand;
 import com.edinarobotics.zeppelin.commands.EndUniversalShootCommand;
 import com.edinarobotics.zeppelin.commands.IncrementShooterSpeedCommand;
 import com.edinarobotics.zeppelin.commands.LowerCenterWheelCommand;
 import com.edinarobotics.zeppelin.commands.OpenGearCollectorCommand;
 import com.edinarobotics.zeppelin.commands.RaiseCenterWheelCommand;
+import com.edinarobotics.zeppelin.commands.ReadSerialTestCommand;
 import com.edinarobotics.zeppelin.commands.SetAugerSpeedCommand;
 import com.edinarobotics.zeppelin.commands.SetCollectorSpeedCommand;
 import com.edinarobotics.zeppelin.commands.SetShooterSpeedCommand;
@@ -56,7 +56,7 @@ public class Controls {
 			gamepad0.rightBumper().whenPressed(new AnchorRobotCommand());
 			gamepad0.rightBumper().whenReleased(new UnanchorRobotCommand());
 	
-			gamepad0.diamondDown().whenPressed(new DriveXInchesVisionCommand(48));
+			gamepad0.diamondDown().whenPressed(new ReadSerialTestCommand());
 		
 //			gamepad0.middleRight().whenPressed(new ResetFieldCentricCommand());
 //			gamepad0.diamondUp().whenPressed(new ToggleFieldCentricCommand());
