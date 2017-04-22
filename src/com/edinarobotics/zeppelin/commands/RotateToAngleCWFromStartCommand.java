@@ -39,7 +39,7 @@ public class RotateToAngleCWFromStartCommand extends Command{
 	}
 	
 	protected void execute(){
-		double rotation = 0.5;
+		double rotation = 0.85;
 		
 		if(Math.abs(target-drivetrain.getGyroAngle())<20 || Math.abs(drivetrain.getGyroAngle()-startAngle)<5)
 			rotation*=0.6;
@@ -58,12 +58,6 @@ public class RotateToAngleCWFromStartCommand extends Command{
 	protected void end(){
 		drivetrain.setValues(0, 0, 0);
 		
-		try {
-			Thread.sleep(300);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		drivetrain.getBackLeftTalon().enableBrakeMode(false);
 		drivetrain.getBackRightTalon().enableBrakeMode(false);

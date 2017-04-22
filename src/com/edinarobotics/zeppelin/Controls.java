@@ -12,18 +12,22 @@ import com.edinarobotics.utils.gamepad.gamepadfilters.PowerFilter;
 import com.edinarobotics.zeppelin.commands.AnchorRobotCommand;
 import com.edinarobotics.zeppelin.commands.CloseGearCollectorCommand;
 import com.edinarobotics.zeppelin.commands.EndAugerButtonCommand;
-import com.edinarobotics.zeppelin.commands.EndUniversalShootCommand;
+import com.edinarobotics.zeppelin.commands.EndLeftAugerButtonCommand;
+import com.edinarobotics.zeppelin.commands.EndRightAugerButtonCommand;
 import com.edinarobotics.zeppelin.commands.IncrementShooterSpeedCommand;
 import com.edinarobotics.zeppelin.commands.LowerCenterWheelCommand;
 import com.edinarobotics.zeppelin.commands.OpenGearCollectorCommand;
+import com.edinarobotics.zeppelin.commands.PunchCollectorCommand;
 import com.edinarobotics.zeppelin.commands.RaiseCenterWheelCommand;
 import com.edinarobotics.zeppelin.commands.ReadSerialTestCommand;
+import com.edinarobotics.zeppelin.commands.RunLeftAugerCommand;
+import com.edinarobotics.zeppelin.commands.RunRightAugerCommand;
 import com.edinarobotics.zeppelin.commands.SetAugerSpeedCommand;
 import com.edinarobotics.zeppelin.commands.SetCollectorSpeedCommand;
 import com.edinarobotics.zeppelin.commands.SetShooterSpeedCommand;
 import com.edinarobotics.zeppelin.commands.SetSlowModeCommand;
 import com.edinarobotics.zeppelin.commands.UnanchorRobotCommand;
-import com.edinarobotics.zeppelin.commands.UniversalShootCommand;
+import com.edinarobotics.zeppelin.commands.UnpunchCollectorCommand;
 
 public class Controls {
 
@@ -53,15 +57,12 @@ public class Controls {
 			gamepad0.leftBumper().whenPressed(new RaiseCenterWheelCommand());
 			gamepad0.leftBumper().whenReleased(new LowerCenterWheelCommand());
 		
-			gamepad0.rightBumper().whenPressed(new AnchorRobotCommand());
-			gamepad0.rightBumper().whenReleased(new UnanchorRobotCommand());
+			gamepad0.rightBumper().whenPressed(new RaiseCenterWheelCommand());
+			gamepad0.rightBumper().whenReleased(new LowerCenterWheelCommand());
+			
+			gamepad0.diamondDown().whenPressed(new AnchorRobotCommand());
+			gamepad0.diamondDown().whenReleased(new UnanchorRobotCommand());
 	
-			gamepad0.diamondDown().whenPressed(new ReadSerialTestCommand());
-		
-//			gamepad0.middleRight().whenPressed(new ResetFieldCentricCommand());
-//			gamepad0.diamondUp().whenPressed(new ToggleFieldCentricCommand());
-
-		
 		//Aiden's Controls
 			gamepad1.dPadUp().whenPressed(new SetCollectorSpeedCommand(-1.0));
 			gamepad1.dPadUp().whenReleased(new SetCollectorSpeedCommand(0.0));
@@ -80,18 +81,21 @@ public class Controls {
 			
 			gamepad1.rightBumper().whenPressed(new SetShooterSpeedCommand(3300,3300));
 			gamepad1.rightBumper().whenReleased(new SetShooterSpeedCommand(0,0));
-			
-//			gamepad1.rightBumper().whenPressed(new IncrementShooterSpeedCommand(-0.05));
-//			gamepad1.rightTrigger().whenPressed(new IncrementShooterSpeedCommand(0.05));
-			
-			gamepad1.leftBumper().whenPressed(new SetAugerSpeedCommand(0.6));
+
+			gamepad1.leftBumper().whenPressed(new SetAugerSpeedCommand(0.6,false));
 			gamepad1.leftBumper().whenReleased(new EndAugerButtonCommand());
 			
-			gamepad1.diamondLeft().whenPressed(new UniversalShootCommand());
-			gamepad1.diamondLeft().whenReleased(new EndUniversalShootCommand());
+			gamepad1.middleLeft().whenPressed(new RunLeftAugerCommand(0.6));
+			gamepad1.middleLeft().whenReleased(new EndLeftAugerButtonCommand());
+
+			gamepad1.middleRight().whenPressed(new RunRightAugerCommand(0.6));
+			gamepad1.middleRight().whenReleased(new EndRightAugerButtonCommand());
 			
 			gamepad1.diamondDown().whenPressed(new IncrementShooterSpeedCommand(-50));
 			gamepad1.diamondUp().whenPressed(new IncrementShooterSpeedCommand(50));
+			
+			gamepad1.diamondLeft().whenPressed(new PunchCollectorCommand());
+			gamepad1.diamondLeft().whenReleased(new UnpunchCollectorCommand());
 		
 	}
 

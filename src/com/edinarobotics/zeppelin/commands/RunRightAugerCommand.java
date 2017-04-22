@@ -5,29 +5,27 @@ import com.edinarobotics.zeppelin.subsystems.Augers;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class SetAugerSpeedCommand extends Command{
+public class RunRightAugerCommand extends Command{
 
 	private Augers augers;
-	private double augerSpeed;
-	private boolean button;
+	private double rightAugerSpeed;
 	
-	public SetAugerSpeedCommand(double speed, boolean button){
-		super("setaugerspeedcommand");
+	public RunRightAugerCommand(double speed){
+		super("runrightaugercommand");
 		this.augers = Components.getInstance().augers;
-		this.augerSpeed = speed;
-		this.button = button;
+		this.rightAugerSpeed = speed;
 		requires(augers);
 	}
 	
 	protected void initialize(){
-		augers.setAugerSpeed(augerSpeed);
-		augers.setIsRunningButton(true);
+		augers.setRightAugerSpeed(rightAugerSpeed);
+		augers.setIsRightRunningButton(true);
 	}
 	
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return !augers.getIsRunningButton() || button;
+		return !augers.getIsRightRunningButton();
 	}
 
 }

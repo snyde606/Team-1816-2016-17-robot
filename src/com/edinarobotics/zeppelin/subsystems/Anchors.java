@@ -18,10 +18,17 @@ public class Anchors extends Subsystem1816{
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		if(anchorPistonSolenoid.get() != anchorsDown)
-			anchorPistonSolenoid.set(anchorsDown);
+		
+//		if(anchorPistonSolenoid.get() != anchorsDown)
+//			anchorPistonSolenoid.set(anchorsDown);
+//	}
+//
+//		Commented out because there's a lexan sheet that extends over max height
+//		so we can't use our anchors while that's on there
+//		
+//		
 	}
-	
+
 	public void anchorRobot(){
 		anchorsDown = true;
 		update();

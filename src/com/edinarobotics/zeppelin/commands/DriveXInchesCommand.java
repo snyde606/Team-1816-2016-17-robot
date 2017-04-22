@@ -22,8 +22,8 @@ public class DriveXInchesCommand extends Command {
 		this.velocity = velocity;
 		this.inchTarget = inches;
 		drivetrain = Components.getInstance().drivetrain;
-//		ticks = (int)(((inches * 41.2*1.018) * 10) / 13);	//COMPETITION CARPET CONSTANT				//OG Zeppelin constants	
-		ticks = (int)(((inches * 36*1.018) * 10) / 13);					//OG Zeppelin constants	
+		ticks = (int)(((inches * 41.2*1.018) * 10) / 13);	//COMPETITION CARPET CONSTANT				//OG Zeppelin constants	
+//		ticks = (int)(((inches * 36*1.018) * 10) / 13);					//OG Zeppelin constants	
 		rampDownValue = ((rampDownStart * 42) * 10) / 13;
 		requires(drivetrain);
 	}
@@ -72,7 +72,7 @@ public class DriveXInchesCommand extends Command {
 //		double right = (velocity*.95);
 //		double left = velocity;
 
-		drivetrain.setDrivetrainSides(left, right);
+		drivetrain.setDrivetrainSides(0.6*left, 0.6*right);
 	}
 
 	@Override
@@ -88,12 +88,6 @@ public class DriveXInchesCommand extends Command {
 	protected void end() {
 		drivetrain.setValues(0.0, 0.0, 0.0);
 		
-		try {
-			Thread.sleep(300);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 //		drivetrain.getBackLeftTalon().enableBrakeMode(false);
 //		drivetrain.getBackRightTalon().enableBrakeMode(false);

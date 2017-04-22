@@ -9,45 +9,85 @@ public class AutonomousCommand extends CommandGroup {
 		switch(mode) {
 			
 			case CENTER_GEAR_AUTO:
-				//accurate
+//experimental end of 10k gear and shoot
 				addSequential(new SetGyroZeroCommand());
-				addSequential(new DriveXInchesCommand(30,0.5));
+				addSequential(new RaiseCenterWheelCommand());
+				addSequential(new SetShooterSpeedCommand(0,0));
+				addSequential(new SetAugerSpeedCommand(0,true));
+				addSequential(new SetCollectorSpeedCommand(0));
+				addSequential(new DriveXInchesCommand(30,0.9));
 				addSequential(new RotateToAngleCWFromStartCommand(0));
-				addSequential(new DriveXInchesVisionCommand(48.0));
-				
+				addSequential(new DriveXInchesVisionCommand(47.5));
+				addSequential(new PunchCollectorCommand());
+				addSequential(new WaitCommand(0.2));
+				addSequential(new DriveXInchesCommand(-20,0.65));
+				addSequential(new DriveXInchesCommand(-20,0.85));
+				addSequential(new UnpunchCollectorCommand());
+				addSequential(new WaitCommand(0.15));
+				addSequential(new RotateToAngleCWFromStartCommand(75));
+				addSequential(new WaitCommand(0.15));
+				addSequential(new SetCollectorSpeedCommand(1.0));
+				addSequential(new DriveXInchesCommand(93,0.9));
+				addSequential(new WaitCommand(0.15));
+				addSequential(new RotateToAngleCWFromStartCommand(125));
+				addSequential(new SetShooterSpeedCommand(3300,3400));
+				addSequential(new WaitCommand(0.15));
+				addSequential(new DriveXInchesCommand(10,0.85));
+				addSequential(new SetAugerSpeedCommand(0.4,true));
+//				addSequential(new DriveXInchesCommand(10,0.85));
+				addSequential(new WaitCommand(3));
+				addSequential(new DriveXInchesCommand(-40,0.95));
+				addSequential(new RotateToAngleCWFromStartCommand(170));
+				addSequential(new DriveXInchesCommand(-48,0.95));
+				addSequential(new LowerCenterWheelCommand());
+
 				break;
 				
 			case LEFT_GEAR_AUTO:
-				 //accurate
+				
 				addSequential(new SetGyroZeroCommand());
-				addSequential(new DriveXInchesCommand(90,0.6));
+				addSequential(new RaiseCenterWheelCommand());
+				addSequential(new DriveXInchesCommand(75,0.75));
 				addSequential(new RotateToAngleCWFromStartCommand(55));
 				addSequential(new DriveXInchesVisionCommand(45));
+				addSequential(new PunchCollectorCommand());
+				addSequential(new WaitCommand(0.4));
+				addSequential(new DriveXInchesCommand(-20,0.75));
+				addSequential(new WaitCommand(0.4));
+				addSequential(new UnpunchCollectorCommand());
+				addSequential(new LowerCenterWheelCommand());
 				
 				break;
 				
 			case RIGHT_GEAR_AUTO:
-				//accurate
+				
 				addSequential(new SetGyroZeroCommand());
-				addSequential(new DriveXInchesCommand(62,0.6));
+				addSequential(new RaiseCenterWheelCommand());
+				addSequential(new DriveXInchesCommand(75,0.75));
 				addSequential(new RotateToAngleCWFromStartCommand(-55));
-				addSequential(new DriveXInchesVisionCommand(70));
+				addSequential(new DriveXInchesVisionCommand(45));
+				addSequential(new PunchCollectorCommand());
+				addSequential(new WaitCommand(0.4));
+				addSequential(new DriveXInchesCommand(-20,0.75));
+				addSequential(new WaitCommand(0.4));
+				addSequential(new UnpunchCollectorCommand());
+				addSequential(new LowerCenterWheelCommand());
 				
 				break;
 				
 			case HOPPER_BOILER_SHOOT_LEFT:
 				
 				addSequential(new SetGyroZeroCommand());
-				addSequential(new DriveXInchesCommand(70,0.6));
+				addSequential(new DriveXInchesCommand(70,0.65));
 				addSequential(new RotateToAngleCWFromStartCommand(-90));
 				addSequential(new SetCollectorSpeedCommand(1.0));	
 				addSequential(new DriveXInchesCommand(42,0.6));
 				addSequential(new WaitCommand(3.5));				
-				addSequential(new DriveXInchesCommand(-10,0.6));
+				addSequential(new DriveXInchesCommand(-10,0.65));
 				addSequential(new RotateToAngleCWFromStartCommand(-180));
-				addSequential(new DriveXInchesCommand(66,0.6));
+				addSequential(new DriveXInchesCommand(66,0.65));
 				addSequential(new RotateToAngleCWFromStartCommand(-135));
-				addSequential(new DriveXInchesCommand(12,0.5));
+				addSequential(new DriveXInchesCommand(12,0.6));
 				addSequential(new UniversalShootCommand());
 				
 				break;
@@ -55,26 +95,27 @@ public class AutonomousCommand extends CommandGroup {
 			case HOPPER_BOILER_SHOOT_RIGHT:
 				
 				addSequential(new SetGyroZeroCommand());
-				addSequential(new DriveXInchesCommand(70,0.6));
+				addSequential(new DriveXInchesCommand(70,0.65));
 				addSequential(new RotateToAngleCWFromStartCommand(90));
 				addSequential(new SetCollectorSpeedCommand(1.0));
-				addSequential(new DriveXInchesCommand(42,0.6));
+				addSequential(new DriveXInchesCommand(42,0.65));
 				addSequential(new WaitCommand(3.5));				
-				addSequential(new DriveXInchesCommand(-10,0.6));
+				addSequential(new DriveXInchesCommand(-10,0.65));
 				addSequential(new RotateToAngleCWFromStartCommand(180));
-				addSequential(new DriveXInchesCommand(66,0.6));
+				addSequential(new DriveXInchesCommand(66,0.65));
 				addSequential(new RotateToAngleCWFromStartCommand(135));
-				addSequential(new DriveXInchesCommand(12,0.5));
+				addSequential(new DriveXInchesCommand(12,0.6));
 				addSequential(new UniversalShootCommand());
 				
 				break;
 				
 			case JUST_SHOOT:
-				
-				addSequential(new DriveXInchesCommand(0,0.45));
+
+				addSequential(new DriveXInchesCommand(120,0.65));
+
+//				addSequential(new UniversalShootCommand());
 				
 			case NOTHING:
-				
 				
 				break;
 				

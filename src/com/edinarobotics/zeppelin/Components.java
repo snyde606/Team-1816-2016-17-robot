@@ -33,7 +33,7 @@ public class Components {
 	//Collector constants
 	private static final int COLLECTOR_TALON = 5; //collector talon!!! whooooohooooooooooooo
 	private static final int GEAR_COLLECTOR_SOLENOID = 5;
-	private static final int GEAR_PUNCHER_SOLENOID = 99;
+	private static final int GEAR_PUNCHER_SOLENOID = 4;
 	//End Collector constants
 	
 	//Shooter constants

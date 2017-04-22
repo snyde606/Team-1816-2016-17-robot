@@ -104,8 +104,8 @@ public class Drivetrain extends Subsystem1816{
 		double rightVelocity = rightSpeed;
 		double centerVelocity = xStrafe;
 		
-		rightVelocity -= rotation*0.75;
-		leftVelocity += rotation*0.75;
+		rightVelocity -= rotation*0.55;
+		leftVelocity += rotation*0.55;
 		
 		backLeft.set(signum(leftVelocity,1,-1));
 		backRight.set(signum(rightVelocity,1,-1));
@@ -249,16 +249,23 @@ public class Drivetrain extends Subsystem1816{
 		//END STRING PARSING
 	}
 	
-	public void readSerialXY(){
+	public boolean readSerialXY(){
 		int space1 = 0;
 		int space2 = 0;
 		int endBracket = 0;
 		boolean successread = false;
+		double whileLoopStart = System.currentTimeMillis();
 		while(!successread)
 			try{
+				System.out.println("looping while loop");
 				newString = serialPort.readString();	
 				if(!newString.equals(""))
 					successread = true;
+				if(Math.abs(whileLoopStart - System.currentTimeMillis()) > 3000){
+					System.out.println("we're stuck");
+					return true;
+				}
+				
 				//read the string from the serial port; store it into temp variable
 			} catch(Exception e){
 				System.out.println("serialPort read messed up");
@@ -313,6 +320,8 @@ public class Drivetrain extends Subsystem1816{
 			oldString = "";
 			newString = "";
 		}
+		
+		return false;
 		//END STRING PARSING
 	}
 	

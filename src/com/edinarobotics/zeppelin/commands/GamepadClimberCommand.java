@@ -20,7 +20,7 @@ public class GamepadClimberCommand extends Command{
 	
 	protected void execute(){
 		double speed = gamepad.getRightJoystick().getY();
-		climber.setClimberMotor(-Math.abs(speed));
+		climber.setClimberMotor(Math.abs(speed));
 	}
 	
 	@Override
