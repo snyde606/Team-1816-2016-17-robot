@@ -5,20 +5,27 @@ import com.edinarobotics.zeppelin.subsystems.Collector;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class UnpunchCollectorCommand extends Command{
+public class UnpunchThenCloseGearCommand extends Command{
 
-	private Collector collector;
+//	private final int DELAY_IN_MILLIS = 100;
+//	private double startTime;
+
+	public Collector collector;
 	
-	public UnpunchCollectorCommand() {
-		super("unpunchcollectorcommand");
+	
+	public UnpunchThenCloseGearCommand() {
+		super("unpunchthenclosegearcommand");
 		this.collector = Components.getInstance().collector;
 		requires(collector);
 	}
 	
 	protected void initialize(){
+//		startTime = System.currentTimeMillis();
+		collector.closeGearDoors();
+//		while(Math.abs(startTime - System.currentTimeMillis()) < DELAY_IN_MILLIS);
 		collector.unpunchGearCollector();
 	}
-
+	
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub

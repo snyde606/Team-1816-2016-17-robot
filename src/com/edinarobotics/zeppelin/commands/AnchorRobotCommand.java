@@ -16,6 +16,7 @@ public class AnchorRobotCommand extends Command{
 	}
 	
 	protected void initialize(){
+		System.out.println("INIT ANCHOR ROBOT");
 		anchors.anchorRobot();
 	}
 	

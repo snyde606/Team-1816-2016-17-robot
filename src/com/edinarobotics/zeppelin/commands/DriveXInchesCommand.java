@@ -22,15 +22,16 @@ public class DriveXInchesCommand extends Command {
 		this.velocity = velocity;
 		this.inchTarget = inches;
 		drivetrain = Components.getInstance().drivetrain;
-		ticks = (int)(((inches * 41.2*1.018) * 10) / 13);	//COMPETITION CARPET CONSTANT				//OG Zeppelin constants	
-//		ticks = (int)(((inches * 36*1.018) * 10) / 13);					//OG Zeppelin constants	
+		//You should math.round instead of cast you could be off by like .5%.
+//		ticks = (int)(((inches * 41.2*1.018) * 10) / 13);	//32//COMPETITION CARPET CONSTANT				//OG Zeppelin constants	
+		ticks = (int)(((inches * 38*1.018) * 10) / 13);	//29				//OG Zeppelin constants	
 		rampDownValue = ((rampDownStart * 42) * 10) / 13;
 		requires(drivetrain);
 	}
 	
 	@Override
 	protected void initialize() {
-		System.out.println("DRIVING " + inchTarget + " INCHES");
+		System.out.println("INIT DRIVE X INCHES");
 		initialPosition = drivetrain.getFrontLeftTalon().getEncPosition();
 		target = ticks + initialPosition;
 		initialAngle = drivetrain.getGyroAngle();
@@ -41,6 +42,8 @@ public class DriveXInchesCommand extends Command {
 		drivetrain.getBackRightTalon().enableBrakeMode(true);
 		drivetrain.getFrontLeftTalon().enableBrakeMode(true);
 		drivetrain.getFrontRightTalon().enableBrakeMode(true);
+		
+		startTime = System.currentTimeMillis();
 	}
 
 	@Override 
@@ -77,6 +80,8 @@ public class DriveXInchesCommand extends Command {
 
 	@Override
 	protected boolean isFinished() {
+		if(Math.abs(startTime - System.currentTimeMillis()) > 3000)
+			return true;
 //		System.out.println("Off by: " + (drivetrain.getFrontLeftTalon().getEncPosition() - target));
 		if(ticks>0)
 			return drivetrain.getFrontLeftTalon().getEncPosition() > target;

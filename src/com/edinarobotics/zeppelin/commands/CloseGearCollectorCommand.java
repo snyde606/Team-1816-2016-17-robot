@@ -16,6 +16,7 @@ public class CloseGearCollectorCommand extends Command{
 	}
 	
 	protected void initialize(){
+		System.out.println("INIT CLOSE GEAR COLLECTOR");
 		collector.closeGearCollector();
 	}
 	

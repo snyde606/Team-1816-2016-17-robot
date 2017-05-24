@@ -6,14 +6,6 @@ import com.edinarobotics.zeppelin.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Command;
 
-////////////////////////////////////////////
-//										  //
-//            Strafing variant            //
-//       used for H-drive or mecanum      //
-//										  //
-//										  //
-////////////////////////////////////////////
-
 public class DriveXInchesVisionCommand extends Command {
 
 	private Drivetrain drivetrain;
@@ -35,15 +27,15 @@ public class DriveXInchesVisionCommand extends Command {
 	public DriveXInchesVisionCommand(double inches) {
 		super("drivexinchescommand");
 		drivetrain = Components.getInstance().drivetrain;
-		ticks = -(int)(((inches * 41.2*1.018) * 10) / 13); //COMPETITION CARPET CONSTANT										//conversion from inches to ticks
-//		ticks = -(int)(((inches * 36*1.018) * 10) / 13);										//conversion from inches to ticks
+//		ticks = -(int)(((inches * 41.2*1.018) * 10) / 13); //COMPETITION CARPET CONSTANT										//conversion from inches to ticks
+		ticks = -(int)(((inches * 38*1.018) * 10) / 13);										//conversion from inches to ticks
 		rampDownValue = rampDownStart*31.6923;
 		requires(drivetrain);
 	} 
 	
 	@Override
 	protected void initialize() {
-		System.out.println("INIT");
+		System.out.println("INIT DRIVE X INCHES VISION");
 		
 		initialPosition = drivetrain.getFrontLeftTalon().getEncPosition();
 		target = initialPosition - ticks; //switch when switching encoder direction
@@ -71,7 +63,7 @@ public class DriveXInchesVisionCommand extends Command {
 		a = drivetrain.getVisionArea();
 		
 		if(a>20000)
-			x=320;
+			x=300;
 		
 //UNTESTED	
 //		if(a>20000 && (Math.abs(target - drivetrain.getFrontLeftTalon().getEncPosition()) < rampDownValue || Math.abs(drivetrain.getFrontLeftTalon().getEncPosition() - initialPosition) < 5*31.6923))
@@ -88,9 +80,10 @@ public class DriveXInchesVisionCommand extends Command {
 //		}
 //UNTESTED
 		
-		double deltaVision = 310-x; 	//how many pixels the target is off center		//320 is the center of the camera screen (camera used for vision tracking) in X-coordinates	
+		double deltaVision = 300-x; 	//how many pixels the target is off center		//320 is the center of the camera screen (camera used for vision tracking) in X-coordinates	
 		
-		double velocityForward = 0.4;
+//		double velocityForward = 0.4; COMPETITION
+		double velocityForward = 0.33;
 		
 		//yStrafe control
 		if (Math.abs(target - drivetrain.getFrontLeftTalon().getEncPosition()) < rampDownValue || Math.abs(drivetrain.getFrontLeftTalon().getEncPosition() - initialPosition) < 5*31.6923) 	//are we close enough to the target to slow down speed?
@@ -109,6 +102,8 @@ public class DriveXInchesVisionCommand extends Command {
 
 	@Override
 	protected boolean isFinished() {
+		if(Math.abs(startTime - System.currentTimeMillis()) > 3000)
+			return true;
 		return Math.abs(drivetrain.getFrontLeftTalon().getEncPosition() - target) < 31*5 || stuckVision;					//are encoder ticks past their target?
 	}
 

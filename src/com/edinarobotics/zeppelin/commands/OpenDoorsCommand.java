@@ -5,20 +5,20 @@ import com.edinarobotics.zeppelin.subsystems.Collector;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class PunchCollectorCommand extends Command{
+public class OpenDoorsCommand extends Command{
 
-	private Collector collector;
+	public Collector collector;
 	
-	public PunchCollectorCommand() {
-		super("punchcollectorcommand");
+	public OpenDoorsCommand(){
+		super("opendoorscommand");
 		this.collector = Components.getInstance().collector;
 		requires(collector);
 	}
 	
 	protected void initialize(){
-		collector.punchGearCollector();
+		collector.openGearDoors();
 	}
-
+	
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub

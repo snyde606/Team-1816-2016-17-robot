@@ -1,5 +1,7 @@
 package com.edinarobotics.zeppelin.commands;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import com.edinarobotics.zeppelin.Components;
 import com.edinarobotics.zeppelin.subsystems.Shooter;
 
@@ -19,7 +21,8 @@ public class IncrementShooterSpeedCommand extends Command{
 	
 	protected void initialize(){
 		shooter.addIncrementSpeed(inc);
-		shooter.setShooterTalons(shooter.getIncrementedShooterSpeed()*1.03,shooter.getIncrementedShooterSpeed());
+		System.out.println(shooter.getIncrementedShooterSpeed());
+		shooter.setShooterTalons(shooter.getIncrementedShooterSpeed(),shooter.getIncrementedShooterSpeed());
 	}
 	
 	@Override

@@ -27,6 +27,7 @@ public class Shooter extends Subsystem1816{
 		this.rightShooterTalon.setF(F);
 		this.leftShooterTalon = new CANTalon(leftShooterTalon);
 		this.leftShooterTalon.changeControlMode(TalonControlMode.Speed);
+//		this.leftShooterTalon.changeControlMode(TalonControlMode.PercentVbus);
 		this.leftShooterTalon.setFeedbackDevice(FeedbackDevice.PulseWidth);
 		this.leftShooterTalon.setPID(P, I, D);
 		this.leftShooterTalon.setF(F);

@@ -46,12 +46,19 @@ public class Zeppelin extends IterativeRobot {
 		
 		chooser = new SendableChooser<Command>();		
 		
-		chooser.addObject("Center Gear Auto", new AutonomousCommand(AutonomousMode.CENTER_GEAR_AUTO));
-		chooser.addDefault("Left Gear Auto", new AutonomousCommand(AutonomousMode.LEFT_GEAR_AUTO));
+		chooser.addObject("Center Gear Auto Right Boiler", new AutonomousCommand(AutonomousMode.CENTER_GEAR_AUTO_RIGHT_BOILER));
+		chooser.addObject("Center Gear Auto Left Boiler", new AutonomousCommand(AutonomousMode.CENTER_GEAR_AUTO_LEFT_BOILER));
+		chooser.addObject("Right Gear Auto Right Boiler",new AutonomousCommand(AutonomousMode.RIGHT_GEAR_RIGHT_BOILER));
+		chooser.addObject("Left Gear Auto Left Boiler", new AutonomousCommand(AutonomousMode.LEFT_GEAR_LEFT_BOILER));
+		chooser.addObject("Left Gear Auto", new AutonomousCommand(AutonomousMode.LEFT_GEAR_AUTO));
 		chooser.addObject("Right Gear Auto", new AutonomousCommand(AutonomousMode.RIGHT_GEAR_AUTO));
-		chooser.addObject("Hopper Boiler Shoot Left", new AutonomousCommand(AutonomousMode.HOPPER_BOILER_SHOOT_LEFT));
-		chooser.addObject("Hopper Boiler Shoot Right", new AutonomousCommand(AutonomousMode.HOPPER_BOILER_SHOOT_RIGHT));
-		chooser.addObject("Just Shoot", new AutonomousCommand(AutonomousMode.JUST_SHOOT));
+		chooser.addObject("Right Boiler Mobility", new AutonomousCommand(AutonomousMode.RIGHT_BOILER_MOBILITY));
+		chooser.addObject("Left Boiler Mobility", new AutonomousCommand(AutonomousMode.LEFT_BOILER_MOBILITY));
+		chooser.addObject("Left Gear Mobility", new AutonomousCommand(AutonomousMode.LEFT_GEAR_MOBILITY));
+		chooser.addObject("Right Gear Mobility", new AutonomousCommand(AutonomousMode.RIGHT_GEAR_MOBILITY));
+		chooser.addDefault("Center Gear Mobility Right", new AutonomousCommand(AutonomousMode.CENTER_GEAR_MOBILITY_RIGHT));
+		chooser.addDefault("Center Gear Mobility Left", new AutonomousCommand(AutonomousMode.CENTER_GEAR_MOBILITY_LEFT));
+		chooser.addObject("Drive", new AutonomousCommand(AutonomousMode.DRIVE_FORWARD));
 		chooser.addObject("Nothing", new AutonomousCommand(AutonomousMode.NOTHING));
 		SmartDashboard.putData("Autonomous", chooser);
 	}

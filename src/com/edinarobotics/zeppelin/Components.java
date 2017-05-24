@@ -34,6 +34,7 @@ public class Components {
 	private static final int COLLECTOR_TALON = 5; //collector talon!!! whooooohooooooooooooo
 	private static final int GEAR_COLLECTOR_SOLENOID = 5;
 	private static final int GEAR_PUNCHER_SOLENOID = 4;
+	private static final int GEAR_DOORS_SOLENOID = 1;
 	//End Collector constants
 	
 	//Shooter constants
@@ -51,8 +52,8 @@ public class Components {
 	//End Climber constants
 	
 	//Pneumatic constants
-	private static final int VERSA_DROP_SOLENOID = 7;
-	private static final int ANCHOR_PISTON_SOLENOID = 6;
+	private static final int VERSA_DROP_SOLENOID = 6;
+	private static final int ANCHOR_PISTON_SOLENOID = 0;
 	private static final int PCM_NODE_ID = 10;
 	//End Pneumatic constants
 	
@@ -61,7 +62,7 @@ public class Components {
 		drivetrain = new Drivetrain(FRONT_LEFT_TALON, FRONT_RIGHT_TALON, //Jacob your code is garbage
 				BACK_LEFT_TALON, BACK_RIGHT_TALON, CENTER_TALON, PCM_NODE_ID, VERSA_DROP_SOLENOID);
 		
-		collector = new Collector(COLLECTOR_TALON, GEAR_COLLECTOR_SOLENOID, GEAR_PUNCHER_SOLENOID, PCM_NODE_ID);
+		collector = new Collector(COLLECTOR_TALON, GEAR_COLLECTOR_SOLENOID, GEAR_PUNCHER_SOLENOID, GEAR_DOORS_SOLENOID,  PCM_NODE_ID);
 		
 		shooter = new Shooter(RIGHT_SHOOTER_TALON, LEFT_SHOOTER_TALON);
 		

@@ -27,6 +27,8 @@ public class DriveXRightYForwardInchesCommand extends Command{
 	}
 	
 	protected void initialize(){
+		System.out.println("INIT DIAGONAL DRIVE");
+		
 		initialForward = drivetrain.getFrontLeftTalon().getEncPosition();
 		initialStrafe = drivetrain.getCenterTalon().getEncPosition();
 		targetForward = initialForward + (int)(inchesForward*31.6923);

@@ -10,17 +10,23 @@ public class Collector extends Subsystem1816{
 	private CANTalon collectorTalon;
 	private Solenoid gearCollectorSolenoid;
 	private Solenoid gearPuncherSolenoid;
+	private Solenoid gearDoorSolenoid;
+
 	
 	private double collectorSpeed;
 	private boolean gearCollectorOpen = false;
 	private boolean gearPuncherPunched = false;
+	private boolean gearDoorsOpen = false;
 	
-	public Collector(int collectorTalon, int gearCollectorSolenoidID, int gearPuncherSolenoidID, int pcmNode){
+	public Collector(int collectorTalon, int gearCollectorSolenoidID, int gearPuncherSolenoidID, int geardoors, int pcmNode){
 		this.collectorTalon = new CANTalon(collectorTalon);
 		this.gearCollectorSolenoid = new Solenoid(pcmNode, gearCollectorSolenoidID);
 		this.gearPuncherSolenoid = new Solenoid(pcmNode, gearPuncherSolenoidID);
+		this.gearDoorSolenoid = new Solenoid(pcmNode, geardoors);
 		this.gearCollectorOpen = false;
 		this.gearPuncherPunched = false;
+		this.gearDoorsOpen = false;
+		this.collectorSpeed = 0.0;
 	}
 	
 	@Override
@@ -33,6 +39,9 @@ public class Collector extends Subsystem1816{
 		
 		if(gearPuncherSolenoid.get()!=gearPuncherPunched)
 			gearPuncherSolenoid.set(gearPuncherPunched);
+		
+		if(gearDoorSolenoid.get()!=gearDoorsOpen)
+			gearDoorSolenoid.set(gearDoorsOpen);
 	}
 	
 	public void setCollectorTalon(double cSpeed){
@@ -61,6 +70,16 @@ public class Collector extends Subsystem1816{
 
 	public void unpunchGearCollector(){
 		gearPuncherPunched = false;
+		update();
+	}
+	
+	public void openGearDoors(){
+		gearDoorsOpen = true;
+		update();
+	}
+
+	public void closeGearDoors(){
+		gearDoorsOpen = false;
 		update();
 	}
 	

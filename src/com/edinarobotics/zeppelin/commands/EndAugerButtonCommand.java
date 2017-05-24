@@ -16,6 +16,7 @@ public class EndAugerButtonCommand extends Command{
 	}
 	
 	protected void initialize(){
+		System.out.println("INIT END AUGER BUTTON");
 		augers.setIsRunningButton(false);
 	}
 	

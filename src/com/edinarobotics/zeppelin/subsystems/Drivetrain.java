@@ -15,7 +15,8 @@ public class Drivetrain extends Subsystem1816{
 
 	private boolean slowMode = false;
 	private boolean fieldCentric = false;
-	private boolean centerWheelDown = true;
+	private boolean centerWheelDown = false;
+	private boolean visionButtonPressed = false;
 	
 	private SerialPort serialPort;
 	private SerialPort sendingSerial;//maximum strafe engaged!!!
@@ -93,7 +94,7 @@ public class Drivetrain extends Subsystem1816{
 		
 		this.versaDropSolenoid = new Solenoid(pcmNode, dropSolenoidID);
 		
-		centerWheelDown = true;
+		centerWheelDown = false;
 		
 	}
 	
@@ -250,15 +251,12 @@ public class Drivetrain extends Subsystem1816{
 	}
 	
 	public boolean readSerialXY(){
-		int space1 = 0;
-		int space2 = 0;
-		int endBracket = 0;
 		boolean successread = false;
 		double whileLoopStart = System.currentTimeMillis();
 		while(!successread)
 			try{
-				System.out.println("looping while loop");
-				newString = serialPort.readString();	
+				System.out.print("l");
+				newString = serialPort.readString();
 				if(!newString.equals(""))
 					successread = true;
 				if(Math.abs(whileLoopStart - System.currentTimeMillis()) > 3000){
@@ -403,6 +401,12 @@ public class Drivetrain extends Subsystem1816{
 	}
 	public int getVisionArea(){
 		return visionArea;
+	}
+	public boolean isVisionButtonPressed(){
+		return visionButtonPressed;
+	}
+	public void setVisionButtonPressed(boolean n){
+		visionButtonPressed = n;
 	}
 	
 	private double signum(double value, double max, double min) {		
