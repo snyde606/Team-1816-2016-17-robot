@@ -99,7 +99,7 @@ public class DriveXInchesVisionCommand extends Command {
 		
 		//yStrafe control
 		if (Math.abs(target - drivetrain.getFrontLeftTalon().getEncPosition()) < rampDownValue || Math.abs(drivetrain.getFrontLeftTalon().getEncPosition() - initialPosition) < 5*31.6923||ai.getAverageVoltage()>.40) 	//are we close enough to the target to slow down speed?
-			velocityForward*=0.85;//.66
+			velocityForward = velocityForward-ai.getAverageVoltage()/2;
 		//end yStrafe control
 		
 		System.out.println("Error: " + deltaVision);
