@@ -11,6 +11,7 @@ import com.edinarobotics.zeppelin.subsystems.Augers;
 import com.edinarobotics.zeppelin.subsystems.Climber;
 import com.edinarobotics.zeppelin.subsystems.Drivetrain;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -35,6 +36,8 @@ public class Zeppelin extends IterativeRobot {
 	private Augers augers;
 	private Climber climber;
 	
+	AnalogInput ai;
+	double bits;
 	@Override
 	public void robotInit() {
 		Controls.getInstance();
@@ -43,6 +46,14 @@ public class Zeppelin extends IterativeRobot {
 		drivetrain = Components.getInstance().drivetrain;
 		augers = Components.getInstance().augers;
 		climber = Components.getInstance().climber;
+		
+		ai = new AnalogInput(2);
+		
+		
+		ai.setOversampleBits(4);
+		ai.setAverageBits(2);
+		bits = ai.getAverageVoltage();
+		AnalogInput.setGlobalSampleRate(62500);
 		
 		chooser = new SendableChooser<Command>();		
 		
