@@ -3,6 +3,7 @@ package com.edinarobotics.zeppelin.commands;
 import com.edinarobotics.zeppelin.Components;
 import com.edinarobotics.zeppelin.subsystems.Drivetrain;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -23,6 +24,9 @@ public class DriveXInchesVisionCommand extends Command {
 	private final int ENDING_TOLERANCE_STRAFE = 3;
 	int x = 0;
 	int a = 0;
+	
+	AnalogInput ai;
+	double bits;
 	
 	public DriveXInchesVisionCommand(double inches) {
 		super("drivexinchescommand");
@@ -52,6 +56,14 @@ public class DriveXInchesVisionCommand extends Command {
 		stuckVision = false;
 		wiggleCounter = 0;
 		startTime = System.currentTimeMillis();
+		
+		ai = new AnalogInput(2);
+		
+		
+		ai.setOversampleBits(4);
+		ai.setAverageBits(2);
+		bits = ai.getAverageVoltage();
+		AnalogInput.setGlobalSampleRate(62500);
 		
 	}
 	
@@ -86,7 +98,7 @@ public class DriveXInchesVisionCommand extends Command {
 		double velocityForward = 0.33;
 		
 		//yStrafe control
-		if (Math.abs(target - drivetrain.getFrontLeftTalon().getEncPosition()) < rampDownValue || Math.abs(drivetrain.getFrontLeftTalon().getEncPosition() - initialPosition) < 5*31.6923) 	//are we close enough to the target to slow down speed?
+		if (Math.abs(target - drivetrain.getFrontLeftTalon().getEncPosition()) < rampDownValue || Math.abs(drivetrain.getFrontLeftTalon().getEncPosition() - initialPosition) < 5*31.6923||ai.getAverageVoltage()>.40) 	//are we close enough to the target to slow down speed?
 			velocityForward*=0.85;//.66
 		//end yStrafe control
 		

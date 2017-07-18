@@ -1,11 +1,21 @@
 package com.edinarobotics.zeppelin.commands;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class AutonomousCommand extends CommandGroup {
-
+	
+	AnalogInput ai;
+	double bits;
+	
 	public AutonomousCommand(AutonomousMode mode) {
+		ai = new AnalogInput(2);
 		
+		
+		ai.setOversampleBits(4);
+		ai.setAverageBits(2);
+		bits = ai.getAverageVoltage();
+		AnalogInput.setGlobalSampleRate(62500);
 		switch(mode) {
 			
 			case CENTER_GEAR_AUTO_RIGHT_BOILER :
